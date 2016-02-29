@@ -110,16 +110,44 @@ void MyPrimitive::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivis
 	Init();
 
 	//Your code starts here
-	float fValue = 0.5f;
-	//3--2
-	//|  |
-	//0--1
-	vector3 point0(-fValue, -fValue, fValue); //0
-	vector3 point1(fValue, -fValue, fValue); //1
-	vector3 point2(fValue, fValue, fValue); //2
-	vector3 point3(-fValue, fValue, fValue); //3
 
-	AddQuad(point0, point1, point3, point2);
+	// variables 
+	float step; // how many degrees to step each loop
+	float coneAngle;
+	float circleAngle;
+
+
+	vector3 pointTip; // tip of the cone
+	vector3 pointBase;
+	vector3 point1; // base point of triangle
+	vector3 point2; // other base point of triangle
+
+	// math
+	step = 360 / a_nSubdivisions;
+	coneAngle = atan(a_fRadius / a_fHeight);
+	circleAngle = 0;
+
+	pointTip = vector3(0.0f, a_fHeight / 2, 0.0f);
+	pointBase = vector3(0.0f, -a_fHeight / 2, 0.0f);
+	
+	// loop through and create sub triangles to form cone
+	for (int i = 0; i < a_nSubdivisions; i++)
+	{
+		// find point 1 of sub triangle
+		point1 = (cos(coneAngle) * cos(circleAngle), 0, sin(circleAngle)) + sin(coneAngle) * vector3(0.0f, 1.0f, 0.0f);
+
+		// move to next base point of sub triangle
+		circleAngle += step;
+
+		// find point 2
+		point2 = (cos(coneAngle) * cos(circleAngle), 0, sin(circleAngle)) + sin(coneAngle) * vector3(0.0f, 1.0f, 0.0f);
+
+		// add these vertices
+		AddVertexPosition(pointTip);
+		AddVertexPosition(pointBase);
+		AddVertexPosition(point1);
+		AddVertexPosition(point2);
+	}
 
 	//Your code ends here
 	CompileObject(a_v3Color);

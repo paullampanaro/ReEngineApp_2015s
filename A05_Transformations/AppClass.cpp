@@ -52,10 +52,14 @@ void AppClass::Update(void)
 	//Calculate the position of the Earth
 	m_m4Earth = glm::rotate(IDENTITY_M4, m_fEarthTimer, vector3(0.0f, 5.0f, 0.0f)) * distanceEarth;
 	
-	//Calculate the position of the Moon
-	m_m4Moon = glm::rotate(m_m4Earth, m_fMoonTimer, vector3(0.0f, 1.0f, 0.0f)) * distanceMoon;
+	//Calculate the position of the Moon, before screwing with earth's rotation because the moon uses it to revolve
+	m_m4Moon = glm::rotate(m_m4Earth, -m_fMoonTimer, vector3(0.0f, 1.0f, 0.0f)) * distanceMoon;
 
-	m_m4Earth *= glm::rotate(m_fMoonTimer, vector3(0.0f, 0.0f, 1.0f)) * glm::translate(0.262f, 0.0f, 0.0f);
+	// translate the earth by its radius on the x axis, rotate to meet camera, and then rotate by 365 days * 24 hours around the y axis
+	m_m4Earth *= glm::rotate(m_fEarthTimer * 24.0f, vector3(0.0f, 1.0f, 0.0f)) * rotateX * rotateY * glm::translate(0.524f, 0.0f, 0.0f);
+
+	// translate the moon by half its radius, rotate to meet camera, and then rotate by the negative of the earth rotation (minus 90 degrees so it looks nice)
+	m_m4Moon *= glm::rotate(-m_fEarthTimer / 24.0f - 90.0f, vector3(0.0f, 1.0f, 0.0f)) * rotateX * rotateY * glm::translate(0.524f * 0.27f, 0.0f, 0.0f);
 
 #pragma endregion
 
