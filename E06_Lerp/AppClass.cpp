@@ -27,8 +27,23 @@ void AppClass::InitVariables(void)
 	vector3 v3End = vector3(m_nObjects, 0.0f, 0.0f);
 
 	// initialize the m_pShere variable and the m_pMatrix variable
-	// left off on step #12
-	
+	m_pSphere = new PrimitiveClass[m_nObjects];
+	m_pMatrix = new matrix4[m_nObjects]; 
+
+	for (int i = 0; i < m_nObjects; i++)
+	{
+		// generates a percentage of the lerp
+		float fPercent = MapValue(static_cast<float>(i), 0.0f, static_cast<float>(m_nObjects), 0.0f, 1.0f);
+
+		// generate new primitve as a new sphere
+		m_pSphere[i].GenerateSphere(1, 5, vector3(fPercent, 0.0f, 0.0f));
+
+		// translate vector of return of the lerp from v3start and v3end as color
+		vector3 tVec = glm::lerp(v3Start, v3End, fPercent);
+
+		// update position of each matrix
+		m_pMatrix[i] = glm::translate(tVec);
+	}
 
 	m_pLightMngr->SetColor(REWHITE, 0);
 	m_pLightMngr->SetIntensity(0.1f, 0);
@@ -108,6 +123,12 @@ void AppClass::Display(void)
 		m_pMeshMngr->AddGridToQueue(1.0f, REAXIS::XY, REBLUE * 0.75f); //renders the XY grid with a 100% scale
 		break;
 	}
+
+	// render spheres
+	for (int i; i < m_nObjects; i++)
+	{
+		// m_pSphere[i]->Render()
+	}
 	
 	m_pMeshMngr->Render(); //renders the render list
 
@@ -117,4 +138,8 @@ void AppClass::Display(void)
 void AppClass::Release(void)
 {
 	super::Release(); //release the memory of the inherited fields
+
+	// release memory
+	delete[] m_pSphere;
+	delete[] m_pMatrix;
 }

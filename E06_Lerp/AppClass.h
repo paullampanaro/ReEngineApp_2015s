@@ -18,7 +18,7 @@ public:
 
 	// added for E06_Lerp
 	int m_nObjects;
-	PrimitiveClass* m_pShere = nullptr;
+	PrimitiveClass* m_pSphere = nullptr;
 	matrix4* m_pMatrix = nullptr;
 
 	/*
