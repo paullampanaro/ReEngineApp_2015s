@@ -33,7 +33,7 @@ void AppClass::InitVariables(void)
 	for (int i = 0; i < m_nObjects; i++)
 	{
 		// generates a percentage of the lerp
-		float fPercent = MapValue(static_cast<float>(i), 0.0f, static_cast<float>(m_nObjects), 0.0f, 1.0f);
+		float fPercent = MapValue(static_cast<float>(i), 0.0f, static_cast<float>(m_nObjects) - 1, 0.0f, 1.0f);
 
 		// generate new primitve as a new sphere
 		m_pSphere[i].GenerateSphere(1, 5, vector3(fPercent, 0.0f, 0.0f));
@@ -50,23 +50,6 @@ void AppClass::InitVariables(void)
 	m_pLightMngr->SetColor(REWHITE, 1);
 	m_pLightMngr->SetIntensity(0.5f, 1);
 	m_pLightMngr->SetPosition(vector3(0.0f, 1.0f,-1.0f), 1);
-
-	//Load a model onto the Mesh manager
-	//m_pMeshMngr->LoadModel("tests\\Cubev.fbx", "Unikitty");
-	int nCubes = 10;
-	vector3 v3Start(-nCubes/2.0f, 0.0f, -nCubes / 2.0f);
-	m_pMeshMngr->LoadModel("Cube.obj", "ElCubo");
-	m_pMeshMngr->SetShaderProgramByName("ElCubo", "Phong");
-	for (uint n = 0; n < nCubes; n++)
-	{
-		if (v3Start != vector3(0.0f))
-		{
-			String sName = "Cube_" + std::to_string(n);
-			m_pMeshMngr->LoadModel("Cube.obj", sName, false, glm::translate(v3Start));
-			m_pMeshMngr->SetShaderProgramByName(sName, "Phong");
-		}
-		v3Start += vector3(1.0f, 0.0f, 1.0f);
-	}
 }
 
 void AppClass::Update(void)
@@ -125,9 +108,9 @@ void AppClass::Display(void)
 	}
 
 	// render spheres
-	for (int i; i < m_nObjects; i++)
+	for (int i = 0; i < m_nObjects; i++)
 	{
-		// m_pSphere[i]->Render()
+		m_pSphere[i].Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), m_pMatrix[i]);
 	}
 	
 	m_pMeshMngr->Render(); //renders the render list
@@ -137,9 +120,18 @@ void AppClass::Display(void)
 
 void AppClass::Release(void)
 {
-	super::Release(); //release the memory of the inherited fields
-
 	// release memory
-	delete[] m_pSphere;
-	delete[] m_pMatrix;
+	if (m_pSphere != nullptr)
+	{
+		delete[] m_pSphere;
+		m_pSphere = nullptr;
+	}
+
+	if (m_pMatrix != nullptr)
+	{
+		delete[] m_pMatrix;
+		m_pMatrix != nullptr;
+	}
+
+	super::Release(); //release the memory of the inherited fields
 }
