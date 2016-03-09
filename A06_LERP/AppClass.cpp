@@ -14,6 +14,23 @@ void AppClass::InitVariables(void)
 	m_pMeshMngr->LoadModel("Sorted\\WallEye.bto", "WallEye");
 
 	fDuration = 1.0f;
+
+	// start at 0 - switch this static variable cause it will look nicer
+	aCycle = 0;
+	bCycle = aCycle + 1;
+
+	// load vector 3 translation points into std::vector container
+	tPoints.push_back(vector3(-4.0f, -2.0f, 5.0f));
+	tPoints.push_back(vector3(1.0f, -2.0f, 5.0f));
+	tPoints.push_back(vector3(-3.0f, -1.0f, 3.0f));
+	tPoints.push_back(vector3(2.0f, -1.0f, 3.0f));
+	tPoints.push_back(vector3(-2.0f, 0.0f, 0.0f));
+	tPoints.push_back(vector3(3.0f, 0.0f, 0.0f));
+	tPoints.push_back(vector3(-1.0f, 1.0f, -3.0f));
+	tPoints.push_back(vector3(4.0f, 1.0f, -3.0f));
+	tPoints.push_back(vector3(0.0f, 2.0f, -5.0f));
+	tPoints.push_back(vector3(5.0f, 2.0f, -5.0f));
+	tPoints.push_back(vector3(1.0f, 3.0f, -5.0f));
 }
 
 void AppClass::Update(void)
@@ -37,6 +54,40 @@ void AppClass::Update(void)
 
 #pragma region Your Code goes here
 	m_pMeshMngr->SetModelMatrix(IDENTITY_M4, "WallEye");
+
+	// if the runtime is greater than duration, done with set of first points
+	if (fRunTime > fDuration)
+	{
+		// reset run time
+		fRunTime -= fDuration;
+
+		// switch to next set of points
+		aCycle += 1;
+		bCycle += 1;
+
+		// loop back to beginning of translation points
+		if (aCycle == tPoints.size())
+		{
+			aCycle = 0;
+		}
+
+		if (bCycle == tPoints.size())
+		{
+			bCycle = 0;
+		}
+	}
+
+	// generates a percentage of the lerp
+	float fPercent = MapValue(static_cast<float>(fRunTime), 0.0f, fDuration, 0.0f, 1.0f);
+
+	// translate vector of return of the lerp from first point and second 
+	vector3 tVec = glm::lerp(tPoints[aCycle], tPoints[bCycle], fPercent);
+
+	// make into a matrix
+	matrix4 tMatrix = glm::translate(tVec);
+
+	m_pMeshMngr->SetModelMatrix(tMatrix, "WallEye");
+
 #pragma endregion
 
 #pragma region Does not need changes but feel free to change anything here

@@ -13,6 +13,14 @@ using namespace ReEng; //Using ReEng namespace to use all the classes in the dll
 class AppClass : public ReEngAppClass
 {
 	float fDuration = 1.0f; //Time Duration of the stops
+
+	// std::vector holding vector3's
+	std::vector<vector3> tPoints;
+
+	// ints to cycle through translation points
+	int aCycle;
+	int bCycle;
+
 public:
 	typedef ReEngAppClass super;
 	/*
