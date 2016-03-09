@@ -17,9 +17,8 @@ class AppClass : public ReEngAppClass
 	// std::vector holding vector3's
 	std::vector<vector3> tPoints;
 
-	// ints to cycle through translation points
-	int aCycle;
-	int bCycle;
+	// variables for drawing those circles
+	PrimitiveClass* m_pSphere = nullptr;
 
 public:
 	typedef ReEngAppClass super;

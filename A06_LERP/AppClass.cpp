@@ -15,10 +15,6 @@ void AppClass::InitVariables(void)
 
 	fDuration = 1.0f;
 
-	// start at 0 - switch this static variable cause it will look nicer
-	aCycle = 0;
-	bCycle = aCycle + 1;
-
 	// load vector 3 translation points into std::vector container
 	tPoints.push_back(vector3(-4.0f, -2.0f, 5.0f));
 	tPoints.push_back(vector3(1.0f, -2.0f, 5.0f));
@@ -31,6 +27,10 @@ void AppClass::InitVariables(void)
 	tPoints.push_back(vector3(0.0f, 2.0f, -5.0f));
 	tPoints.push_back(vector3(5.0f, 2.0f, -5.0f));
 	tPoints.push_back(vector3(1.0f, 3.0f, -5.0f));
+
+	// take care of circle generation
+	m_pSphere = new PrimitiveClass();
+	m_pSphere->GenerateSphere(0.1f, 5, RERED);
 }
 
 void AppClass::Update(void)
@@ -55,6 +55,9 @@ void AppClass::Update(void)
 #pragma region Your Code goes here
 	m_pMeshMngr->SetModelMatrix(IDENTITY_M4, "WallEye");
 
+	// start at 0 - switched this to static variable cause it will look nicer?
+	static int aCycle = 0;
+
 	// if the runtime is greater than duration, done with set of first points
 	if (fRunTime > fDuration)
 	{
@@ -62,19 +65,22 @@ void AppClass::Update(void)
 		fRunTime -= fDuration;
 
 		// switch to next set of points
-		aCycle += 1;
-		bCycle += 1;
+		aCycle++;
+		int bCycle = aCycle + 1;
 
 		// loop back to beginning of translation points
 		if (aCycle == tPoints.size())
 		{
 			aCycle = 0;
 		}
+	}
 
-		if (bCycle == tPoints.size())
-		{
-			bCycle = 0;
-		}
+	// int for accessing next vector in container
+	int bCycle = aCycle + 1;
+
+	if (bCycle == tPoints.size())
+	{
+		bCycle = 0;
 	}
 
 	// generates a percentage of the lerp
@@ -126,6 +132,15 @@ void AppClass::Display(void)
 		break;
 	}
 	
+	// render the circles
+	matrix4 mProj = m_pCameraMngr->GetProjectionMatrix();
+	matrix4 mView = m_pCameraMngr->GetViewMatrix();
+
+	for (int i = 0; i < tPoints.size(); i++)
+	{
+		m_pSphere->Render(mProj, mView, glm::translate(tPoints[i]));
+	}
+
 	m_pMeshMngr->Render(); //renders the render list
 
 	m_pGLSystem->GLSwapBuffers(); //Swaps the OpenGL buffers
@@ -133,5 +148,7 @@ void AppClass::Display(void)
 
 void AppClass::Release(void)
 {
+	// remember to delete
+	SafeDelete(m_pSphere);
 	super::Release(); //release the memory of the inherited fields
 }
