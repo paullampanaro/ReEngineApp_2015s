@@ -33,6 +33,9 @@ void AppClass::Update(void)
 	//linear combination
 	m_mToWorld = rotX * rotY * rotZ;
 
+	// ignore previous method and instead, use quaternions
+	m_mToWorld = glm::toMat4(m_quatOrientation);
+
 	//Setting the model matrix
 	m_pMeshMngr->SetModelMatrix(m_mToWorld, "Steve");
 
