@@ -21,6 +21,30 @@ void AppClass::ProcessKeyboard(void)
 		bModifier = true;
 #pragma endregion
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+	{
+		qControl = glm::quat(1.0, 0.0, 0.0, 0.0);
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+	{
+		// quaternions and angleAxis
+		if (!bModifier) qControl = qControl * glm::angleAxis(1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		else qControl = qControl * glm::angleAxis(-1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
+	{
+		// quaternions and angleAxis
+		if (!bModifier) qControl = qControl * glm::angleAxis(1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		else qControl = qControl * glm::angleAxis(-1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+	{
+		// quaternions and angleAxis
+		if (!bModifier) qControl = qControl * glm::angleAxis(1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+		else qControl = qControl * glm::angleAxis(-1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+
 #pragma region Camera Positioning
 	if(bModifier)
 		fSpeed *= 10.0f;

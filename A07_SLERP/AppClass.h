@@ -14,6 +14,14 @@ class AppClass : public ReEngAppClass
 {
 	float m_fDay = 1.0f; //How much time in seconds a day lasts;
 
+	// user controlled quaternion
+	glm::quat qControl;
+
+	// matrix4
+	glm::mat4 m4Earth;
+	glm::mat4 m4Moon;
+	glm::mat4 m4Sun;
+
 public:
 	typedef ReEngAppClass super;
 	/*
