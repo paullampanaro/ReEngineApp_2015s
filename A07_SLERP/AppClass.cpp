@@ -1,7 +1,7 @@
 #include "AppClass.h"
 void AppClass::InitWindow(String a_sWindowName)
 {
-	super::InitWindow("SLERP - YOUR USER NAME GOES HERE"); // Window Name
+	super::InitWindow("SLERP - Lampanaro, Paul"); // Window Name
 
 	//Setting the color to black
 	m_v4ClearColor = vector4(0.0f);
@@ -47,18 +47,49 @@ void AppClass::Update(void)
 	float fEarthHalfRevTime = 0.5f * m_fDay; // Move for Half a day
 	float fMoonHalfOrbTime = 14.0f * m_fDay; //Moon's orbit is 28 earth days, so half the time for half a route
 
+	// percentages for various slerp
+	float fPercentEarthRev = MapValue(static_cast<float>(fRunTime), 0.0f, static_cast<float>(fEarthHalfRevTime), 0.0f, 1.0f);
+	float fPercentEarthOrb = MapValue(static_cast<float>(fRunTime), 0.0f, static_cast<float>(fEarthHalfOrbTime), 0.0f, 1.0f);
+	float fPercentMoonOrb = MapValue(static_cast<float>(fRunTime), 0.0f, static_cast<float>(fMoonHalfOrbTime), 0.0f, 1.0f);
+
+	// convert the control quaternion into a matrix4 for use with other matrices
+	glm::mat4 m4Control = glm::mat4_cast(qControl);
+	
+	// start and end quaternions for all orientations
+	glm::quat qStart = glm::quat_cast(m4Control);
+	glm::quat qEnd = qStart * glm::angleAxis(180.0f, vector3(0.0f, 1.0f, 0.0f));
+
+	// find the slerp for Earth's orbit
+	glm::quat qCurrentEarthOrb = glm::mix(qStart, qEnd, fPercentEarthOrb);
+	glm::quat qCurrentEarthRev = glm::mix(qStart, qEnd, fPercentEarthRev);
+	glm::quat qCurrentMoonOrb = glm::mix(qStart, qEnd, fPercentMoonOrb);
+
+	// apply orbital orientation, translate, and scaling (in reverse)
+	m4Earth = m4Control * glm::mat4_cast(qCurrentEarthOrb) * glm::translate(vector3(11.0f, 0.0f, 0.0f)) * glm::scale(vector3(0.524f, 0.524f, 0.524f));
+
+	// repeat for moon, but also apply Earth's position
+	m4Moon = m4Earth * glm::mat4_cast(qCurrentMoonOrb) * glm::translate(vector3(2.0f, 0.0f, 0.0f)) * glm::scale(vector3(0.27f, 0.27f, 0.27f));
+
+	// now apply Earth's revolution orientation, so it doesnt affect the moon's orbit
+	m4Earth *= glm::mat4_cast(qCurrentEarthRev);
+
+	// scale the sun
+	m4Sun = m4Control * glm::scale(vector3(5.936f, 5.936f, 5.936f));
+
 	//Setting the matrices
-	m_pMeshMngr->SetModelMatrix(IDENTITY_M4, "Sun");
-	m_pMeshMngr->SetModelMatrix(IDENTITY_M4, "Earth");
-	m_pMeshMngr->SetModelMatrix(IDENTITY_M4, "Moon");
+	m_pMeshMngr->SetModelMatrix(m4Sun, "Sun");
+	m_pMeshMngr->SetModelMatrix(m4Earth, "Earth");
+	m_pMeshMngr->SetModelMatrix(m4Moon, "Moon");
 
 	//Adds all loaded instance to the render list
 	m_pMeshMngr->AddInstanceToRenderList("ALL");
 
-	static int nEarthOrbits = 0;
-	static int nEarthRevolutions = 0;
-	static int nMoonOrbits = 0;
+	int nEarthOrbits = fRunTime / (fEarthHalfOrbTime * 2);
+	int nEarthRevolutions = fRunTime / (fEarthHalfRevTime * 2);
+	int nMoonOrbits = fRunTime / (fMoonHalfOrbTime * 2);
 
+	// if statements to increment counters
+	
 	//Indicate the FPS
 	int nFPS = m_pSystem->GetFPS();
 

@@ -24,22 +24,36 @@ void AppClass::ProcessKeyboard(void)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 	{
 		m_v3Orientation = vector3(0.0f);
+
+		m_quatOrientation = glm::quat(1.0, 0.0, 0.0, 0.0);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 	{
-		if (!bModifier) m_v3Orientation.x += 1.0f;
-		else m_v3Orientation.x -= 1.0f;
+		// if (!bModifier) m_v3Orientation.x += 1.0f;
+		// else m_v3Orientation.x -= 1.0f;
+
+		// quaternions and angleAxis
+		if (!bModifier) m_quatOrientation = m_quatOrientation * glm::angleAxis(glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		else m_quatOrientation = m_quatOrientation * glm::angleAxis(glm::radians(-60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
 	{
-		if (!bModifier) m_v3Orientation.y += 1.0f;
-		else m_v3Orientation.y -= 1.0f;
+		// if (!bModifier) m_v3Orientation.y += 1.0f;
+		// else m_v3Orientation.y -= 1.0f;
+
+		// quaternions and angleAxis
+		if (!bModifier) m_quatOrientation = m_quatOrientation * glm::angleAxis(glm::radians(60.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		else m_quatOrientation = m_quatOrientation * glm::angleAxis(glm::radians(-60.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 	{
-		if (!bModifier) m_v3Orientation.z += 1.0f;
-		else m_v3Orientation.z -= 1.0f;
+		// if (!bModifier) m_v3Orientation.z += 1.0f;
+		// else m_v3Orientation.z -= 1.0f;
+
+		// quaternions and angleAxis
+		if (!bModifier) m_quatOrientation = m_quatOrientation * glm::angleAxis(glm::radians(60.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		else m_quatOrientation = m_quatOrientation * glm::angleAxis(glm::radians(-60.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	}
 
 #pragma region Camera Positioning
