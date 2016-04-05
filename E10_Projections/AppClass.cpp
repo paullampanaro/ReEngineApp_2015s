@@ -15,7 +15,7 @@ void AppClass::InitVariables(void)
 
 	//Calculate the first projections
 	m_m4Projection = glm::perspective(45.0f, 1080.0f / 768.0f, 0.01f, 1000.0f);
-	m_m4View = glm::lookAt(glm::vec3(0.0f, 0.0f, 15.0f), glm::vec3(0.0f, 0.0f, 14.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	m_m4View = glm::lookAt(glm::vec3(0.0f, 0.0f, 15.0f),  glm::vec3(0.0f, 0.0f, 14.0f), glm::vec3(0.0f, 1.0f, 0.0f)); 
 }
 
 void AppClass::Update(void)
@@ -28,6 +28,31 @@ void AppClass::Update(void)
 
 	//Adds all loaded instance to the render list
 	m_pMeshMngr->AddInstanceToRenderList("ALL");
+
+	/*
+	//Calculate the first projections
+	m_m4Projection = glm::perspective(
+		45.0f, // angle of view
+		1080.0f / 768.0f, // ratio
+		0.01f, // near clip plane (relative to camera)
+		1000.0f // far clip plane (relative to camera)
+		); 
+
+	m_m4Projection = glm::ortho(
+		-20.0f, // left
+		20.0f, // right
+		-10.0f, // bottom
+		10.0f, // top
+		0.01f, // near
+		1000.0f // far
+		);
+
+	m_m4View = glm::lookAt(
+		glm::vec3(0.0f, 3.0f, 15.0f),  // position
+		glm::vec3(0.0f, 0.0f, 0.0f), // what I'm looking at
+		glm::vec3(0.0f, 1.0f, 0.0f)); // up
+
+	*/
 }
 
 void AppClass::Display(void)
