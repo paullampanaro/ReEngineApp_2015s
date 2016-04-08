@@ -41,10 +41,10 @@ void AppClass::Display(void)
 	m_pMeshMngr->AddGridToQueue(1.0f, REAXIS::XY);
 
 	//Render the cone
-	m_pCone->Render(camera->GetProjection(false), camera->GetView(), IDENTITY_M4);
+	m_pCone->Render(camera->GetProjection(toggleView), camera->GetView(), IDENTITY_M4);
 
 	//Render the cylinder
-	m_pCylinder->Render(camera->GetProjection(false), camera->GetView(), IDENTITY_M4);
+	m_pCylinder->Render(camera->GetProjection(toggleView), camera->GetView(), IDENTITY_M4);
 
 	//Render the rest of the meshes
 	m_pMeshMngr->Render();

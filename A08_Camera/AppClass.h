@@ -63,9 +63,9 @@ public:
 	matrix4 GetProjection(bool bOrthographic)
 	{
 		if (bOrthographic)
-			proj = glm::perspective(45.0f, 1080.0f / 768.0f, 0.01f, 1000.0f);
-		else
 			proj = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, 0.01f, 1000.0f);
+		else
+			proj = glm::perspective(45.0f, 1080.0f / 768.0f, 0.01f, 1000.0f);
 
 		return proj;
 	};
@@ -77,6 +77,12 @@ public:
 	};
 
 	// sets the target of the camera
+	void SetTarget(vector3 v3Target)
+	{
+		target = v3Target;
+	};
+
+	// sets the target of the camera
 	void SetUp(vector3 v3Up)
 	{
 		up = v3Up;
@@ -85,19 +91,19 @@ public:
 	// move the camera forward (or backwards) depending on the "view vector"
 	void MoveForward(float fIncrement)
 	{
-		position += (glm::conjugate(orient) * vector3(0.0f, 0.0f, -1.0f)) * fIncrement;
+		position += vector3(0.0f, 0.0f, -1.0f) * fIncrement;
 	};
 
 	// move the camera based on the "right" vector depending on the "view" vector
 	void MoveSideways(float fIncrement)
 	{
-		position += (glm::conjugate(orient) * vector3(1.0f, 0.0f, 0.0f)) * fIncrement;
+		position += vector3(1.0f, 0.0f, 0.0f) * fIncrement;
 	};
 
 	// move the camera up or down depending on the "up vector"
 	void MoveVertical(float fIncrement)
 	{
-		position += (glm::conjugate(orient) * vector3(0.0f, 1.0f, 0.0f)) * fIncrement;
+		position += vector3(0.0f, 1.0f, 0.0f) * fIncrement;
 	};
 
 	// orient your camera (meaning forward and up vectors) changing its angle in x
@@ -127,6 +133,9 @@ class AppClass : public ReEngAppClass
 	float m_fTemp = 0.0f;
 
 	Camera* camera;
+
+	// bool to toggle perspective and orthographic
+	bool toggleView = false;
 
 public:
 	typedef ReEngAppClass super;
