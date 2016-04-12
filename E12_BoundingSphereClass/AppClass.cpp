@@ -19,7 +19,6 @@ void AppClass::InitVariables(void)
 	m_pMeshMngr->LoadModel("Minecraft\\Steve.obj", "Steve");
 	m_pMeshMngr->LoadModel("Minecraft\\Creeper.obj", "Creeper");
 
-	// steve
 	std::vector<vector3> vertexList = m_pMeshMngr->GetVertexList("Steve");
 	uint nVertexCount = vertexList.size();
 
@@ -51,10 +50,11 @@ void AppClass::InitVariables(void)
 	}
 
 	m_v3Center1 = (v3Max + v3Min) / 2.0f;
-	m_fRadius1 = glm::distance(m_v3Center1, v3Max);
 
+	m_fRadius1 = glm::distance(m_v3Center1, v3Max);
 	m_pSphere1 = new PrimitiveClass();
 	m_pSphere1->GenerateSphere(m_fRadius1, 10, REGREEN);
+
 
 	// creeper
 	vertexList = m_pMeshMngr->GetVertexList("Creeper");
@@ -85,11 +85,10 @@ void AppClass::InitVariables(void)
 	}
 
 	m_v3Center2 = (v3Max + v3Min) / 2.0f;
-	m_fRadius2 = glm::distance(m_v3Center1, v3Max);
 
+	m_fRadius2 = glm::distance(m_v3Center2, v3Max);
 	m_pSphere2 = new PrimitiveClass();
 	m_pSphere2->GenerateSphere(m_fRadius2, 10, RERED);
-
 }
 
 void AppClass::Update(void)
@@ -117,10 +116,12 @@ void AppClass::Update(void)
 	int nFPS = m_pSystem->GetFPS();
 	bool bAreColliding = false;
 
-	// collision check here
-	m_pMeshMngr->PrintLine("x: " + std::to_string(m_v3Center1.x) + " ", RERED);
-	m_pMeshMngr->PrintLine("y: " + std::to_string(m_v3Center1.y) + " ", RERED);
-	m_pMeshMngr->PrintLine("z: " + std::to_string(m_v3Center1.z) + " ", RERED);
+
+	//Collision check goes here
+	m_pMeshMngr->Print("x:" + std::to_string( m_v3Center1.x ) + " ", RERED);
+	m_pMeshMngr->Print("y:" + std::to_string(m_v3Center1.y) + " ", RERED);
+	m_pMeshMngr->Print("z:" + std::to_string(m_v3Center1.z) + " ", RERED);
+	m_pMeshMngr->PrintLine("");
 
 	//print info into the console
 	printf("FPS: %d            \r", nFPS);//print the Frames per Second
@@ -129,7 +130,8 @@ void AppClass::Update(void)
 	if (bAreColliding)
 		m_pMeshMngr->PrintLine("They are colliding! >_<", RERED);
 	else
-		m_pMeshMngr->PrintLine("They are not colliding! :D", REGREEN);
+		m_pMeshMngr->PrintLine("They are not colliding! =)", REGREEN);
+
 	m_pMeshMngr->Print("FPS:");
 	m_pMeshMngr->Print(std::to_string(nFPS), RERED);
 }
@@ -165,6 +167,23 @@ void AppClass::Display(void)
 	m4Model = m_pMeshMngr->GetModelMatrix("Creeper") * glm::translate(m_v3Center2);
 	m_pSphere2->Render(m4Projection, m4View, m4Model);
 	
+	m4Projection = m_pCameraMngr->GetProjectionMatrix();
+	m4View = m_pCameraMngr->GetViewMatrix();
+
+	m4Model =
+		m_pMeshMngr->GetModelMatrix("Steve") *
+		glm::translate(m_v3Center1) *
+		glm::scale(vector3(m_fRadius1 * 2.0f));
+	//m_pSphere1->Render(m4Projection, m4View, m4Model);
+	m_pMeshMngr->AddSphereToQueue(m4Model, RERED, WIRE);
+
+	m4Model =
+		m_pMeshMngr->GetModelMatrix("Creeper") *
+		glm::translate(m_v3Center2) *
+		glm::scale(vector3(m_fRadius2 * 2.0f));
+	//m_pSphere2->Render(m4Projection, m4View, m4Model);
+	m_pMeshMngr->AddSphereToQueue(m4Model, RERED, WIRE);
+
 	m_pMeshMngr->Render(); //renders the render list
 
 	m_pGLSystem->GLSwapBuffers(); //Swaps the OpenGL buffers
