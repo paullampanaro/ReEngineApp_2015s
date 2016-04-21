@@ -8,13 +8,14 @@ Date: 2015/09
 #include "RE\ReEngAppClass.h"
 #include <SFML\Graphics.hpp>
 #include "MyBoundingSphereClass.h"
+#include "MyBoundingCubeClass.h"
 
 using namespace ReEng; //Using ReEng namespace to use all the classes in the dll
 
 class AppClass : public ReEngAppClass
 {
-	MyBoundingSphereClass* m_pSphere2 = nullptr;
-	MyBoundingSphereClass* m_pSphere1 = nullptr;
+	MyBoundingCubeClass* m_pCube1 = nullptr;
+	MyBoundingCubeClass* m_pCube2 = nullptr;
 
 	vector3 m_v3O1 = vector3(-2.5f, 0.0f, 0.0f);
 	vector3 m_v3O2 = vector3( 2.5f, 0.0f, 0.0f);

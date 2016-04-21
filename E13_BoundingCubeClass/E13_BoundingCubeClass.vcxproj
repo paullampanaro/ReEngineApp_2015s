@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F8318B78-847D-4D6F-B0AA-F3AC80C5FFF0}</ProjectGuid>
-    <RootNamespace>E12_BoundingSphereClass</RootNamespace>
-    <ProjectName>E12_BoundingSphereClass</ProjectName>
+    <ProjectGuid>{BEEEB5BF-2A24-44FE-A753-713A345472D8}</ProjectGuid>
+    <RootNamespace>E13_BoundingCubeClass</RootNamespace>
+    <ProjectName>E13_BoundingCubeClass</ProjectName>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -107,6 +107,7 @@ xcopy "$(SolutionDir)include\RE\Shaders" "$(SolutionDir)_Binary\Shaders" /y</Com
   <ItemGroup>
     <ClInclude Include="..\res\Resource.h" />
     <ClInclude Include="AppClass.h" />
+    <ClInclude Include="MyBoundingCubeClass.h" />
     <ClInclude Include="MyBoundingSphereClass.h" />
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +117,7 @@ xcopy "$(SolutionDir)include\RE\Shaders" "$(SolutionDir)_Binary\Shaders" /y</Com
     <ClCompile Include="AppClass.cpp" />
     <ClCompile Include="AppClassControls.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MyBoundingCubeClass.cpp" />
     <ClCompile Include="MyBoundingSphereClass.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

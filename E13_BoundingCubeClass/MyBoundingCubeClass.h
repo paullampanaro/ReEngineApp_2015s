@@ -2,8 +2,8 @@
 Programmer: Alberto Bobadilla (labigm@gmail.com)
 Date: 2015/10
 ----------------------------------------------*/
-#ifndef __MYBOUNDINGCubeCLASS_H_
-#define __MYBOUNDINGCubeCLASS_H_
+#ifndef __MYBOUNDINGCUBECLASS_H_
+#define __MYBOUNDINGCUBECLASS_H_
 
 #include "RE\ReEng.h"
 
@@ -111,4 +111,4 @@ private:
 	void Init(void);
 };
 
-#endif //__MYBOUNDINGCubeCLASS_H__
+#endif //__MYBOUNDINGCUBECLASS_H__
