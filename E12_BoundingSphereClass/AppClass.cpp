@@ -21,10 +21,6 @@ void AppClass::InitVariables(void)
 
 	m_pSphere1 = new MyBoundingSphereClass(m_pMeshMngr->GetVertexList("Steve"));
 	m_pSphere2 = new MyBoundingSphereClass(m_pMeshMngr->GetVertexList("Creeper"));
-
-	// ask professor or TA about this, don't understand
-	position1 = m_pSphere1->GetCenterG();
-	position2 = m_pSphere2->GetCenterG();
 }
 
 void AppClass::Update(void)
@@ -50,7 +46,7 @@ void AppClass::Update(void)
 
 	bool isColliding = m_pSphere1->IsColliding(m_pSphere2);
 
-	/*
+	// ask Alberto about having to modify GetCenterG() method
 	if (isColliding)
 	{
 		m_pMeshMngr->AddSphereToQueue(m_pSphere1->GetModelMatrix() *
@@ -67,26 +63,6 @@ void AppClass::Update(void)
 			glm::scale(vector3(m_pSphere1->GetRadius()) * 2.0f), REGREEN, WIRE);
 		m_pMeshMngr->AddSphereToQueue(m_pSphere2->GetModelMatrix() *
 			glm::translate(vector3(m_pSphere2->GetCenterG()))  *
-			glm::scale(vector3(m_pSphere2->GetRadius()) * 2.0f), REGREEN, WIRE);
-	}
-	*/
-
-	if (isColliding)
-	{
-		m_pMeshMngr->AddSphereToQueue(m_pSphere1->GetModelMatrix() *
-			glm::translate(position1) *
-			glm::scale(vector3(m_pSphere1->GetRadius()) * 2.0f), RERED, WIRE);
-		m_pMeshMngr->AddSphereToQueue(m_pSphere2->GetModelMatrix() *
-			glm::translate(position2)  *
-			glm::scale(vector3(m_pSphere2->GetRadius()) * 2.0f), RERED, WIRE);
-	}
-	else
-	{
-		m_pMeshMngr->AddSphereToQueue(m_pSphere1->GetModelMatrix() *
-			glm::translate(position1) *
-			glm::scale(vector3(m_pSphere1->GetRadius()) * 2.0f), REGREEN, WIRE);
-		m_pMeshMngr->AddSphereToQueue(m_pSphere2->GetModelMatrix() *
-			glm::translate(position2)  *
 			glm::scale(vector3(m_pSphere2->GetRadius()) * 2.0f), REGREEN, WIRE);
 	}
 

@@ -77,7 +77,7 @@ MyBoundingSphereClass& MyBoundingSphereClass::operator=(MyBoundingSphereClass co
 MyBoundingSphereClass::~MyBoundingSphereClass(){Release();};
 //Accessors
 void MyBoundingSphereClass::SetModelMatrix(matrix4 a_m4ToWorld){ m_m4ToWorld = a_m4ToWorld; }
-vector3 MyBoundingSphereClass::GetCenterG(void){ return vector3(m_m4ToWorld * vector4(m_v3Center, 1.0f)); }
+vector3 MyBoundingSphereClass::GetCenterG(void){ return vector3(/*m_m4ToWorld * */vector4(m_v3Center, 1.0f)); } // need to ask about that
 float MyBoundingSphereClass::GetRadius(void) { return m_fRadius; }
 //--- Non Standard Singleton Methods
 bool MyBoundingSphereClass::IsColliding(MyBoundingSphereClass* const a_pOther)
