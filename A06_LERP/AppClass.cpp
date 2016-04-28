@@ -14,23 +14,6 @@ void AppClass::InitVariables(void)
 	m_pMeshMngr->LoadModel("Sorted\\WallEye.bto", "WallEye");
 
 	fDuration = 1.0f;
-
-	// load vector 3 translation points into std::vector container
-	tPoints.push_back(vector3(-4.0f, -2.0f, 5.0f));
-	tPoints.push_back(vector3(1.0f, -2.0f, 5.0f));
-	tPoints.push_back(vector3(-3.0f, -1.0f, 3.0f));
-	tPoints.push_back(vector3(2.0f, -1.0f, 3.0f));
-	tPoints.push_back(vector3(-2.0f, 0.0f, 0.0f));
-	tPoints.push_back(vector3(3.0f, 0.0f, 0.0f));
-	tPoints.push_back(vector3(-1.0f, 1.0f, -3.0f));
-	tPoints.push_back(vector3(4.0f, 1.0f, -3.0f));
-	tPoints.push_back(vector3(0.0f, 2.0f, -5.0f));
-	tPoints.push_back(vector3(5.0f, 2.0f, -5.0f));
-	tPoints.push_back(vector3(1.0f, 3.0f, -5.0f));
-
-	// take care of circle generation
-	m_pSphere = new PrimitiveClass();
-	m_pSphere->GenerateSphere(0.1f, 5, RERED);
 }
 
 void AppClass::Update(void)
@@ -54,46 +37,6 @@ void AppClass::Update(void)
 
 #pragma region Your Code goes here
 	m_pMeshMngr->SetModelMatrix(IDENTITY_M4, "WallEye");
-
-	// start at 0 - switched this to static variable cause it will look nicer?
-	static int aCycle = 0;
-
-	// if the runtime is greater than duration, done with set of first points
-	if (fRunTime > fDuration)
-	{
-		// reset run time
-		fRunTime -= fDuration;
-
-		// switch to next set of points
-		aCycle++;
-		int bCycle = aCycle + 1;
-
-		// loop back to beginning of translation points
-		if (aCycle == tPoints.size())
-		{
-			aCycle = 0;
-		}
-	}
-
-	// int for accessing next vector in container
-	int bCycle = aCycle + 1;
-
-	if (bCycle == tPoints.size())
-	{
-		bCycle = 0;
-	}
-
-	// generates a percentage of the lerp
-	float fPercent = MapValue(static_cast<float>(fRunTime), 0.0f, fDuration, 0.0f, 1.0f);
-
-	// translate vector of return of the lerp from first point and second 
-	vector3 tVec = glm::lerp(tPoints[aCycle], tPoints[bCycle], fPercent);
-
-	// make into a matrix
-	matrix4 tMatrix = glm::translate(tVec);
-
-	m_pMeshMngr->SetModelMatrix(tMatrix, "WallEye");
-
 #pragma endregion
 
 #pragma region Does not need changes but feel free to change anything here
@@ -114,41 +57,14 @@ void AppClass::Display(void)
 {
 	//clear the screen
 	ClearScreen();
-
 	//Render the grid based on the camera's mode:
-	switch (m_pCameraMngr->GetCameraMode())
-	{
-	default: //Perspective
-		m_pMeshMngr->AddGridToQueue(1.0f, REAXIS::XY); //renders the XY grid with a 100% scale
-		break;
-	case CAMERAMODE::CAMROTHOX:
-		m_pMeshMngr->AddGridToQueue(1.0f, REAXIS::YZ, RERED * 0.75f); //renders the YZ grid with a 100% scale
-		break;
-	case CAMERAMODE::CAMROTHOY:
-		m_pMeshMngr->AddGridToQueue(1.0f, REAXIS::XZ, REGREEN * 0.75f); //renders the XZ grid with a 100% scale
-		break;
-	case CAMERAMODE::CAMROTHOZ:
-		m_pMeshMngr->AddGridToQueue(1.0f, REAXIS::XY, REBLUE * 0.75f); //renders the XY grid with a 100% scale
-		break;
-	}
-	
-	// render the circles
-	matrix4 mProj = m_pCameraMngr->GetProjectionMatrix();
-	matrix4 mView = m_pCameraMngr->GetViewMatrix();
-
-	for (int i = 0; i < tPoints.size(); i++)
-	{
-		m_pSphere->Render(mProj, mView, glm::translate(tPoints[i]));
-	}
-
+	m_pMeshMngr->AddGridToRenderListBasedOnCamera(m_pCameraMngr->GetCameraMode());
 	m_pMeshMngr->Render(); //renders the render list
-
+	m_pMeshMngr->ResetRenderList(); //Reset the Render list after render
 	m_pGLSystem->GLSwapBuffers(); //Swaps the OpenGL buffers
 }
 
 void AppClass::Release(void)
 {
-	// remember to delete
-	SafeDelete(m_pSphere);
 	super::Release(); //release the memory of the inherited fields
 }
